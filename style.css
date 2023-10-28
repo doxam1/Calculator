@@ -1,13 +1,21 @@
 body {
+    flex-direction: column;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 99%;
-    height: 97vh;
+    justify-content: space-between;
+    /* align-items: center; */
+    width: 100%;
+    height: 100vh;
+    /* margin: 10%; */
+    gap:20px;
+    /* border: 2px solid green; */
+    overflow: hidden;
+    margin-top:0;
     margin: 0;
 }
 
 .mainContainer {
+    margin:auto;
+    /* margin-top: 30px; */
     padding: 10px;
     border-radius: 10%;
     flex-shrink: 1;
@@ -18,9 +26,13 @@ body {
     flex-direction: column;
     box-sizing: border-box;
     gap:20px;
+    box-shadow: 4px 6px 10px 5px black;
+    margin-top: 3%;
 }
 
 .screen {
+    box-shadow: 0 0 0 2px black;;
+    border-radius: 5px;
     flex-direction: column;
     display: flex;
     justify-content: space-evenly;
@@ -44,6 +56,9 @@ button {
     height: 50px;
 }
 .firstRow {
+    .button {
+        background-color:darkslategray;
+    }
  
 }
 .secondRow {
@@ -59,6 +74,10 @@ button {
 
 }
 
+.squareRoot, .exponent {
+    background-color:darkslategray;    
+}
+
 .buttons {
     margin: auto;
     display:flex;
@@ -66,6 +85,25 @@ button {
     justify-content: space-around;
     width: 90%;
 }
+.delete {
+    background-color: crimson;
+}
 .reset {
-   background-color: crimson;
+   background-color: coral;
+}
+
+.equal {
+    background-color: forestgreen;
+}
+footer {
+    bottom:0;
+    justify-content: center;
+    /* border: 2px solid black; */
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 40px;
+    /* background-color:dodgerblue; */
+    box-shadow: 3px 5px 10px 10px black;
+
 }
