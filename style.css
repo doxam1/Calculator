@@ -11,21 +11,59 @@ body {
     padding: 10px;
     border-radius: 10%;
     flex-shrink: 1;
-    width: 400px;
+    width: 350px;
     height: 500px;
     display: flex;
     background-color: darkgray;
     flex-direction: column;
     box-sizing: border-box;
+    gap:20px;
 }
 
 .screen {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
     background-color: lightgreen;
     /* flex:1; */
     width: 95%;
     height: 80px;
     margin: 25px auto 10px auto;
+    .screenText {
+        margin-right: 4%;
+        margin-bottom: 2%;
+        font-size: 24px;
+    }
 }
-.oparators {
-    flex:1;
+
+button {
+    border-radius: 30px;
+    width: 50px;
+    height: 50px;
+}
+.firstRow {
+ 
+}
+.secondRow {
+
+}
+.thirdRow {
+
+}
+
+.fourthRow {
+}
+.fifthRow {
+
+}
+
+.buttons {
+    margin: auto;
+    display:flex;
+    gap:10px;
+    justify-content: space-around;
+    width: 90%;
+}
+.reset {
+   background-color: crimson;
 }
