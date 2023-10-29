@@ -52,6 +52,7 @@ buttons.forEach((button) => {
         }
         if (button.classList.contains('squareRoot')) {
             screenInput.textContent = squareRoot(screenInput.textContent)
+            screenOutput.textContent = '';
         }
         if (button.classList.contains('delete')) {
             if (afterEqual == true) return;
@@ -60,58 +61,63 @@ buttons.forEach((button) => {
         }
         if (button.classList.contains('exponent')) {
             screenInput.textContent = exponent(screenInput.textContent);
+            screenOutput.textContent = '';
         }
         if (button.classList.contains('number')) {
             if (afterEqual == true) {
+               screenOutput.textContent += ' ' + screenInput.textContent;
                screenInput.textContent = '';
-              afterEqual = false;
-            // operatorPressed = false;
-        }
-        //////////
+               afterEqual = false;
+            }
+            if (screenInput.textContent == '0') screenInput.textContent = '';
+            screenInput.innerHTML += button.textContent;
+       }
+       if (button.classList.contains('operator')) {
+            if (screenInput.textContent == '0') return;
+        //////////////////////////////
+            if (operatorPressed == true) {
+                let toBeCalculated = screenOutput.textContent;
+                let splitToCalculate = toBeCalculated.trim().split(' ');
+                a = parseInt(splitToCalculate[0]);
+                b = (parseInt(screenInput.textContent))  
+                operatorSign = splitToCalculate[1];
+                operatorSignNext = button.textContent; 
+                screenOutput.textContent = operate(a, b) + ' ' + operatorSignNext;
+                screenInput.textContent = '';
+                // operatorPressed = false;
+             } else {
+                operatorPressed = true;
+                 //////////////////////////////
+                if (screenOutput.textContent != '') screenOutput.textContent = '';
+                screenOutput.innerHTML += screenInput.textContent +' '+ button.textContent;
+                screenInput.textContent =''; 
+         }
         
-        //////////
-        if (screenInput.textContent == '0') screenInput.textContent = '';
-        screenInput.innerHTML += button.textContent
-      }
-      if (button.classList.contains('operator')) {
-        //////////////////////////////
-        if (operatorPressed == true) {
-            const toBeCalculated = screenOutput.textContent;
-            const splitToCalculate = toBeCalculated.split(' ');
-            // console.log(splitToCalculate)
-            a = parseInt(splitToCalculate[0]);
-            b = (parseInt(screenInput.textContent))
-            operatorSign = splitToCalculate[1];
-            button.addEventListener('click', (e) => {
-                console.log(e.target.textContent)
-                operatorSign = e.target.textContent;
-                splitToCalculate[1] = e.target.textContent;
-            })            
-            screenOutput.textContent = operate(a, b) + ' ' + operatorSign;
-            screenInput.textContent = '';
-            // operatorPressed = false;
-          } else {
-        operatorPressed = true;
-        //////////////////////////////
-        if (screenOutput.textContent != '') screenOutput.textContent = '';
-        screenOutput.innerHTML += screenInput.textContent +' '+ button.textContent;
-        screenInput.textContent =''; }
-      }
-      if (button.classList.contains('reset')) {
-        screenInput.textContent = '0';
-        screenOutput.textContent = '';
-        operatorPressed = false;
-      }
-      if (button.classList.contains('equal')) {
-        afterEqual = true;
-        screenOutput.innerHTML += ' ' + screenInput.textContent;
-        const toBeCalculated = screenOutput.textContent;
-        const splitToCalculte = toBeCalculated.split(' ');
-        a = parseFloat(splitToCalculte[0]);
-        b = parseFloat(splitToCalculte[2]);
-        operatorSign = splitToCalculte[1];
-        screenInput.textContent = operate(a, b);
-        operatorPressed = false;
-      }
-    })
-});
+        }
+        if (button.classList.contains('reset')) {
+            screenInput.textContent = '0';
+            screenOutput.textContent = '';
+            operatorPressed = false;
+        }
+        if (button.classList.contains('equal')) {
+          if (screenInput.textContent == '0') return;
+          afterEqual = true;
+          if (screenInput.textContent == operate(a,b))  return; 
+          screenOutput.textContent += ' ' + screenInput.textContent;
+          console.log(screenOutput.textContent)
+          const toBeCalculated = screenOutput.textContent.trim();
+          const splitToCalculate = toBeCalculated.split(' ').filter(e => {return e.replace(/(  )/g)})
+          console.log (splitToCalculate)
+          if (splitToCalculate[1] == undefined) {
+              screenInput.textContent = splitToCalculate[0];
+              console.log(screenInput.textContent)
+              screenOutput.textContent = 'error';
+          }
+          a = parseFloat(splitToCalculate[0]);
+          b = parseFloat(splitToCalculate[2]);
+          operatorSign = splitToCalculate[1];
+          screenInput.textContent = operate(a, b);
+          operatorPressed = false;
+        }
+     })
+ });
