@@ -188,3 +188,12 @@ buttons.forEach((button) => {
         }
      })
  });
+
+ window.addEventListener('keydown', (e) => {
+    buttons.forEach((button) => {
+    if (e.key == button.textContent) button.dispatchEvent(new Event('mousedown'));
+    if (e.key == 'Backspace' && button.classList.contains('delete')) button.dispatchEvent(new Event('mousedown'));
+    if (e.key == 'Enter' && button.classList.contains('equal')) button.dispatchEvent(new Event('mousedown'));
+    if (e.key == '*' && button.classList.contains('multiply')) button.dispatchEvent(new Event('mousedown'));
+    if (e.key == ' ' && button.classList.contains('reset')) button.dispatchEvent(new Event('mousedown'));
+ })})
