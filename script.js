@@ -39,6 +39,7 @@ const buttons = document.querySelectorAll('.button');
 let a = '';
 let b = '';
 let operatorSign = '';
+let splitToCalculate = '';
 // flag for reset screen when button pressed after user press equal sign.
 let afterEqual = false;
 //////////
@@ -48,11 +49,15 @@ let operatorPressed = false;
 buttons.forEach((button) => {
     button.addEventListener('mousedown', () => {
         if (button.classList.contains('dot')) {
+            if (screenInput.textContent.includes('.')) return;
             screenInput.textContent += '.';
+            afterEqual = false;
         }
         if (button.classList.contains('squareRoot')) {
             screenInput.textContent = squareRoot(screenInput.textContent)
             screenOutput.textContent = '';
+            afterEqual = false;
+            operatorPressed = false;
         }
         if (button.classList.contains('delete')) {
             if (afterEqual == true) return;
@@ -62,35 +67,67 @@ buttons.forEach((button) => {
         if (button.classList.contains('exponent')) {
             screenInput.textContent = exponent(screenInput.textContent);
             screenOutput.textContent = '';
+            afterEqual = false;
+            operatorPressed = false;
         }
         if (button.classList.contains('number')) {
+            if (screenInput.textContent == operate(a,b) && afterEqual == true) {
+                screenInput.textContent = '';  
+                screenOutput.textContent = '';
+                afterEqual = false;
+            }
             if (afterEqual == true) {
                screenOutput.textContent += ' ' + screenInput.textContent;
                screenInput.textContent = '';
                afterEqual = false;
             }
-            if (screenInput.textContent == '0') screenInput.textContent = '';
+            if (screenInput.textContent == '0') {
+                screenInput.textContent = button.textContent;
+                screenOutput.textContent = '';
+                return;
+            }
             screenInput.innerHTML += button.textContent;
+        
        }
        if (button.classList.contains('operator')) {
-            if (screenInput.textContent == '0') return;
-        //////////////////////////////
+        if (screenInput.textContent == 'Infinity') return;
+            if (screenInput.textContent == '0' && button.classList.contains('minus')) {
+                screenInput.innerHTML = '-';
+                return;
+            }
+            if (screenInput.textContent == '-' && (button.classList.contains('plus')
+                                               || button.classList.contains('minus'))) {
+                screenInput.textContent = '0';
+                return;
+            }
+            if (screenInput.textContent == '0' && (button.classList.contains('plus')
+                                               || button.classList.contains('multiply')
+                                               || button.classList.contains('divide'))
+                                            ) return; 
+
             if (operatorPressed == true) {
                 let toBeCalculated = screenOutput.textContent;
                 let splitToCalculate = toBeCalculated.trim().split(' ');
                 a = parseInt(splitToCalculate[0]);
-                b = (parseInt(screenInput.textContent))  
+                b = (parseInt(screenInput.textContent))
+                
                 operatorSign = splitToCalculate[1];
-                operatorSignNext = button.textContent; 
+                operatorSignNext = button.textContent;
+                if (!(isNaN(a)) && !(isNaN(b))) {
                 screenOutput.textContent = operate(a, b) + ' ' + operatorSignNext;
                 screenInput.textContent = '';
-                // operatorPressed = false;
+                } else {
+                    screenOutput.textContent = a + ' ' + operatorSignNext
+                }
              } else {
                 operatorPressed = true;
-                 //////////////////////////////
                 if (screenOutput.textContent != '') screenOutput.textContent = '';
-                screenOutput.innerHTML += screenInput.textContent +' '+ button.textContent;
+                if (screenInput.textContent.charAt(screenInput.textContent.length-1) == '.') {
+                    screenInput.textContent = screenInput.textContent.replace('.', '')
+                }
+                screenOutput.textContent += screenInput.textContent +' '+ button.textContent;
                 screenInput.textContent =''; 
+            
          }
         
         }
@@ -98,20 +135,23 @@ buttons.forEach((button) => {
             screenInput.textContent = '0';
             screenOutput.textContent = '';
             operatorPressed = false;
+            afterEqual = false;
         }
-        if (button.classList.contains('equal')) {
-          if (screenInput.textContent == '0') return;
+
+        if (button.classList.contains('equal')) { 
+           if (screenInput.textContent == '0' && screenOutput.textContent == '') return;
+           if (screenInput.textContent == 'Infinity') return;
+           if(screenOutput.textContent.trim().split(' ').length >= 3) return;
           afterEqual = true;
-          if (screenInput.textContent == operate(a,b))  return; 
           screenOutput.textContent += ' ' + screenInput.textContent;
-          console.log(screenOutput.textContent)
-          const toBeCalculated = screenOutput.textContent.trim();
-          const splitToCalculate = toBeCalculated.split(' ').filter(e => {return e.replace(/(  )/g)})
-          console.log (splitToCalculate)
+          toBeCalculated = screenOutput.textContent.trim();
+          splitToCalculate = toBeCalculated.split(' ').filter(e => {return e.replace(/(  )/g)})
+          if (splitToCalculate[2] == undefined) return;
           if (splitToCalculate[1] == undefined) {
-              screenInput.textContent = splitToCalculate[0];
-              console.log(screenInput.textContent)
-              screenOutput.textContent = 'error';
+              screenInput.textContent = screenOutput.textContent;
+              screenOutput.textContent = '';
+              afterEqual=false;
+              return;
           }
           a = parseFloat(splitToCalculate[0]);
           b = parseFloat(splitToCalculate[2]);
