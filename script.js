@@ -143,6 +143,7 @@ buttons.forEach((button) => {
             screenOutput.textContent = '';
             operatorPressed = false;
             afterEqual = false;
+            squareExpoFlag = false;
         }
 
         if (button.classList.contains('equal')) { 
