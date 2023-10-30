@@ -29,7 +29,7 @@ if (operatorSign == '+') {
     return subtract(a, b);
 } else if (operatorSign == 'x') {
     return multiply(a, b);
-} else if (operatorSign == '/') {
+} else if (operatorSign == '/') {    
     return divide(a, b);
 }};
 //some constants for screen, for buttons.
@@ -55,6 +55,7 @@ buttons.forEach((button) => {
             afterEqual = false;
         }
         if (button.classList.contains('squareRoot')) {
+            if (operate(a, b) == 'Infinity') return;
             screenInput.textContent = squareRoot(screenInput.textContent)
             screenOutput.textContent = '';
             afterEqual = false;
@@ -62,11 +63,12 @@ buttons.forEach((button) => {
             squareExpoFlag = true;
         }
         if (button.classList.contains('delete')) {
-            if (afterEqual == true) return;
+            if (afterEqual == true && operate(a, b) != 'Infinity') return;
             screenInput.textContent = screenInput.textContent.split('').slice(0, -1).join('');
             if (screenInput.textContent == '') screenInput.textContent = '0';
         }
         if (button.classList.contains('exponent')) {
+            if (operate(a, b) == 'Infinity') return;
             screenInput.textContent = exponent(screenInput.textContent);
             screenOutput.textContent = '';
             afterEqual = false;
@@ -83,21 +85,22 @@ buttons.forEach((button) => {
                 screenOutput.textContent = '';
                 afterEqual = false;
             }
-            if (afterEqual == true) {
+            if (afterEqual == true && operate(a, b) != 'Infinity') {
                screenOutput.textContent += ' ' + screenInput.textContent;
                screenInput.textContent = '';
                afterEqual = false;
             }
             if (screenInput.textContent == '0') {
                 screenInput.textContent = button.textContent;
-                screenOutput.textContent = '';
+                if (operate(a, b) == 'Infinity') {screenOutput.textContent = `${a} ${operatorSign}`;
+                } else {screenOutput.textContent = ''}
                 return;
             }
             screenInput.innerHTML += button.textContent;
         
        }
        if (button.classList.contains('operator')) {
-        if (screenInput.textContent == 'Infinity') return;
+        if (operate(a, b) == 'Infinity') return;
             if (screenInput.textContent == '0' && button.classList.contains('minus')) {
                 screenInput.innerHTML = '-';
                 return;
@@ -146,7 +149,7 @@ buttons.forEach((button) => {
             squareExpoFlag = false;
         }
 
-        if (button.classList.contains('equal')) { 
+        if (button.classList.contains('equal')) {             
            if (screenOutput.textContent == '') return;
            if (screenInput.textContent == '0' && screenOutput.textContent == '') return;
            if (screenInput.textContent == 'Infinity') return;
@@ -165,7 +168,22 @@ buttons.forEach((button) => {
           a = parseFloat(splitToCalculate[0]);
           b = parseFloat(splitToCalculate[2]);
           operatorSign = splitToCalculate[1];
-          screenInput.textContent = operate(a, b);
+          let result = operate(a, b);
+          if (result == 'Infinity') {            
+         screenInput.textContent = b;
+         setTimeout(() => {
+            screenInput.style.color = 'black'
+         }, 300);
+         setTimeout(() => {
+            screenInput.style.color = 'red';
+         }, 600);
+         setTimeout(() => {
+            screenInput.style.color = 'black'
+         }, 900);
+         screenInput.style.color = 'red';
+         screenOutput.textContent = `${a} ${operatorSign}`
+        } else {screenInput.textContent = operate(a, b)
+        }
           operatorPressed = false;
         }
      })
