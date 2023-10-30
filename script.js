@@ -40,6 +40,7 @@ let a = '';
 let b = '';
 let operatorSign = '';
 let splitToCalculate = '';
+let squareExpoFlag = false;
 // flag for reset screen when button pressed after user press equal sign.
 let afterEqual = false;
 //////////
@@ -58,6 +59,7 @@ buttons.forEach((button) => {
             screenOutput.textContent = '';
             afterEqual = false;
             operatorPressed = false;
+            squareExpoFlag = true;
         }
         if (button.classList.contains('delete')) {
             if (afterEqual == true) return;
@@ -69,8 +71,13 @@ buttons.forEach((button) => {
             screenOutput.textContent = '';
             afterEqual = false;
             operatorPressed = false;
+            squareExpoFlag = true;
         }
         if (button.classList.contains('number')) {
+            if (squareExpoFlag == true) {
+                screenInput.textContent = '';
+                squareExpoFlag = false;
+            }
             if (screenInput.textContent == operate(a,b) && afterEqual == true) {
                 screenInput.textContent = '';  
                 screenOutput.textContent = '';
@@ -139,6 +146,7 @@ buttons.forEach((button) => {
         }
 
         if (button.classList.contains('equal')) { 
+           if (screenOutput.textContent == '') return;
            if (screenInput.textContent == '0' && screenOutput.textContent == '') return;
            if (screenInput.textContent == 'Infinity') return;
            if(screenOutput.textContent.trim().split(' ').length >= 3) return;
