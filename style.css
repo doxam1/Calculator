@@ -32,6 +32,7 @@ body {
 }
 
 .screen {
+    overflow: hidden;
     box-shadow: 0 0 0 2px black;;
     border-radius: 5px;
     flex-direction: column;
