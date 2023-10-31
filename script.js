@@ -100,6 +100,10 @@ buttons.forEach((button) => {
         
        }
        if (button.classList.contains('operator')) {
+        if (screenInput.textContent == '-' &&
+           (button.classList.contains('multiply') ||
+           button.classList.contains('divide'))) return;
+           
         if (operate(a, b) == 'Infinity') return;
             if (screenInput.textContent == '0' && button.classList.contains('minus')) {
                 screenInput.innerHTML = '-';
@@ -142,6 +146,7 @@ buttons.forEach((button) => {
         
         }
         if (button.classList.contains('reset')) {
+            if (operate(a ,b) == 'Infinity') operate(a=1, b=1);
             screenInput.textContent = '0';
             screenOutput.textContent = '';
             operatorPressed = false;
@@ -169,7 +174,15 @@ buttons.forEach((button) => {
           b = parseFloat(splitToCalculate[2]);
           operatorSign = splitToCalculate[1];
           let result = operate(a, b);
-          if (result == 'Infinity') {            
+          if (result == 'Infinity') {
+            const screen = document.querySelector('.screen');
+            const errorZero = document.createElement('div')
+            errorZero.textContent = 'Division by zero is undefined'
+            errorZero.style.cssText = "color:red; font-weight:400;margin-top: -25px; margin-right: 20%;"; 
+            screen.appendChild(errorZero);
+            setTimeout(() => {
+                screen.removeChild(errorZero);
+            }, 1000);
          screenInput.textContent = b;
          setTimeout(() => {
             screenInput.style.color = 'black'
